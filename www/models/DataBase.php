@@ -87,6 +87,8 @@ class Database{
          if ($this->getObject($checkQuery)){
             // execute the query
             $this->connect->exec($query);
+            // get last id from inserted object
+            $last_id = $this->connect->lastInsertId();
             // returns the last updated object in the database
             return $this->getObject($checkItem . " WHERE id=" . $last_id);
          } else {
