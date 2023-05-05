@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "";
+require_once __DIR__ . "/../models/UserModel.php";
 
 class IngredientsController extends BaseController{
     //Création de la fonction getIngredients qui va ressortir tout mes ingredients
@@ -89,7 +89,7 @@ class IngredientsController extends BaseController{
         }
 
         public function updateIngredients(){
-
+            
         }
 
         public function deleteIngredients() {
