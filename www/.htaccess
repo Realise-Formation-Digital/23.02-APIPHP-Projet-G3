@@ -1,3 +1,10 @@
-RewriteEngine on
-RewriteRule ^clients/?$ controller.php?%{QUERY_STRING}
-RewriteRule ^clients/([0-9]+)$ controller.php?id=$1&%{QUERY_STRING}
+<IfModule !mod_rewrite.c>
+  FallbackResource /index.php
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.php [QSA,L]
+</IfModule>
