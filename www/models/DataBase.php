@@ -83,7 +83,7 @@ class Database{
    */
    public function update(string $query, string $checkQuery, string $checkItem): stdClass{
       try{
-         // Check if the entry exists before deleting it
+         // Check if the entry exists before updating it
          if ($this->getObject($checkQuery)){
             // execute the query
             $this->connect->exec($query);
@@ -108,7 +108,7 @@ class Database{
    */
    public function delete(string $query, string $checkQuery): string{
       try{
-         // Check if the entry exists before updating it
+         // Check if the entry exists before deleting it
          if ($this->getObject($checkQuery)){
             // execute the query
             $this->connect->exec($query);
