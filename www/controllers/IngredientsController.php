@@ -28,7 +28,7 @@ class IngredientsController extends BaseController{
             $perPage = $urlParams['per_page'];
             }
             // Récupération des ingrédients avec les filtres, tri et pagination
-            $ingredients = $ingredientModel->getIngredients($filter, $sort, $page, $perPage);
+            $ingredients = $ingredientModel->getIngredients();
             // Envoi de la réponse en format json
             $responseData = json_encode($ingredients);
             $this->sendOutput($responseData);
@@ -89,7 +89,30 @@ class IngredientsController extends BaseController{
         }
 
         public function updateIngredients(){
+            try {
+                $ingredientModel = new IngredientModel();
+                $urlParams = $this->getQueryStringParams();
+                if(!isset($urlParams['id']) || !is_numeric($urlParams['id'])) {
+                throw new Exception("L'identifiant est incorrect ou n'a pas été spécifié");
+                }
             
+                $ingredientModel = new IngredientsModel();
+                $body = $this->getBody();
+                if(!$body){
+                    throw new Exception("Uaglio ! you did not send any information !!");
+                }
+                if (!isset($body['malt']) || !isset($body['hops'])){
+                        throw new Exception('Invalid value. Allowed values are "malt" and "hops"', 400);
+                }
+                else {
+                $keys = array_keys($body);
+                $valuesToInsert = [];
+                foreach($keys as $key) {
+                      if (in_array($key, ['type'])) {
+                        $valuesToInsert[$key] = $body[$key];
+                      }
+                    }
+                }
         }
 
         public function deleteIngredients() {
