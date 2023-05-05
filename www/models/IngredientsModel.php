@@ -41,8 +41,8 @@ class Ingredients extends Database
 /*-----supprimer les ingredients à l'aide de l'ID---*/
   public function deleteIngredients($ingredients,$id){
 
-    return $this -> delete("DELETE FROM users WHERE id=$id",
-    "SELECT id FROM users WHERE id=$id");
+    return $this -> delete("DELETE FROM ingredients WHERE id=$id",
+    "SELECT id FROM ingredients WHERE id=$id");
   }
  
   }
