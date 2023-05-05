@@ -2,7 +2,7 @@
 require_once __DIR__ . "";
 
 class IngredientsController extends BaseController{
-    //Création de la fonction get
+    //Création de la fonction getIngredients qui va ressortir tout mes ingredients
 
     public function getIngredients(){
         try {
@@ -39,9 +39,26 @@ class IngredientsController extends BaseController{
             $this->sendOutput($strErrorDesc, ['Content-Type: application/json', $strErrorHeader]);
             }
         }
-
+        //création de la methode read qui va me permettre de ressortir une biere 
         public function readIngredients() {
+            try {
+                $ingredientModel = new IngredientModel();
+                $urlParams = $this->getQueryStringParams();
+                if(!isset($urlParams['id']) || !is_numeric($urlParams['id'])) {
+                throw new Exception("L'identifiant est incorrect ou n'a pas été spécifié");
+                }
 
+                $ingredients = $ingredientModel->getSingleIngredients($urlParams['id']);
+
+                $responseData = json_encode($ingredients);
+                $this->sendOut($responseData);
+
+            } catch (Error $e) {
+                    // En cas d'erreur
+                    $strErrorDesc = $e->getMessage() . ' Something went wrong! Please contact support.';
+                    $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+                    $this->sendOutput($strErrorDesc, ['Content-Type: application/json', $strErrorHeader]);
+            }
         }
 
         public function createIngredients() {
