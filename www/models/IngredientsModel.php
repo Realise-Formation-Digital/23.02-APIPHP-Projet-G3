@@ -5,6 +5,14 @@ require_once "./DataBase.php";
 /*-----création d'une class ingredients pour chercher dans la base de données ---*/
 class Ingredients extends Database
 {
+    public $id;
+    public $type;
+    public $name;
+    public $amount_value;
+    public $amount_unit;
+    public $amount_add;
+    public $amount_attribute;
+    
   
 /*----- la fonction recherche -----*/
   public function searchIngredients() {
@@ -39,7 +47,7 @@ class Ingredients extends Database
 
   }
 /*-----supprimer les ingredients à l'aide de l'ID---*/
-  public function deleteIngredients($ingredients,$id){
+  public function deleteIngredients($id){
 
     return $this -> delete("DELETE FROM ingredients WHERE id=$id",
     "SELECT id FROM ingredients WHERE id=$id");

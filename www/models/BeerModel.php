@@ -5,10 +5,21 @@ require_once "./DataBase.php";
 /*-----création d'une class Beer pour faire des requettes dans la base de données ---*/
 class Beer extends Database
 {
+    public $id;
+    public $name;
+    public $tagline;
+    public $first_brewed;
+    public $description;
+    public $image_url;
+    public $brewers_tips;
+    public $contribued_by;
+    public $food_pairin1;
+    public $food_paring2;
+    public $food_paring3;
   
 /*----- la fonction recherche -----*/
-  public function searchBeers() {
-   return $this->getObjects("SELECT * FROM beers");
+  public function searchBeers($offset = 0,$limit = 50) {
+   return $this->getObjects("SELECT * FROM beers ORDER BY name ASC LIMIT $offset, $limit");
   }
 
   public function createBeers($beers) {
@@ -39,7 +50,7 @@ class Beer extends Database
 
   }
 /*-----supprimer les bierres à l'aide de l'ID---*/
-  public function deleteBeers($beers,$id){
+  public function deleteBeers($id){
 
     return $this -> delete("DELETE FROM beers WHERE id=$id",
     "SELECT id FROM beers WHERE id=$id");
