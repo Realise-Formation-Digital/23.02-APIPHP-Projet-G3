@@ -6,7 +6,7 @@ class Database{
    /**
     * Class contructor - connect to the database API
     */
-   public function __contruct(){
+   public function __construct(){
       try{
          // try connecting to the database
          $this->connect = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_DATABASE_NAME, DB_USERNAME, DB_PASSWORD);
@@ -21,7 +21,7 @@ class Database{
    *    @param string $query
    *    return object
    */
-   public function getObjects(string $query): stdClass{
+   public function getObjects(string $query): array{
       try{
          // prepare statement
          $stmt = $this->connect->prepare($query);
@@ -41,7 +41,7 @@ class Database{
    *   @param string $query
    *   return object
    */
-   public function getObject(string $query): stdClass{
+   public function getObject(string $query): array{
       try{
          // prepare statement
          $stmt = $this->connect->prepare($query);
@@ -61,7 +61,7 @@ class Database{
    *   @param string $checkitem
    *   return object
    */
-   public function insert(string $query, string $checkItem): stdClass{
+   public function insert(string $query, string $checkItem): array{
       try{
          // execute the query.
          $this->connect->exec($query);
@@ -81,12 +81,14 @@ class Database{
    *   @param string $checkitem
    *   return object
    */
-   public function update(string $query, string $checkQuery, string $checkItem): stdClass{
+   public function update(string $query, string $checkQuery, string $checkItem): array{
       try{
-         // Check if the entry exists before deleting it
+         // Check if the entry exists before updating it
          if ($this->getObject($checkQuery)){
             // execute the query
             $this->connect->exec($query);
+            // get last id from inserted object
+            $last_id = $this->connect->lastInsertId();
             // returns the last updated object in the database
             return $this->getObject($checkItem . " WHERE id=" . $last_id);
          } else {
@@ -106,7 +108,7 @@ class Database{
    */
    public function delete(string $query, string $checkQuery): string{
       try{
-         // Check if the entry exists before updating it
+         // Check if the entry exists before deleting it
          if ($this->getObject($checkQuery)){
             // execute the query
             $this->connect->exec($query);
