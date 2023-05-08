@@ -41,7 +41,7 @@ class Database{
    *   @param string $query
    *   return object
    */
-   public function getObject(string $query): array{
+   public function getObject(string $query): bool|array{
       try{
          // prepare statement
          $stmt = $this->connect->prepare($query);
