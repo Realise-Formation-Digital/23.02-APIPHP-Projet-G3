@@ -1,9 +1,12 @@
 <?php
-require_once __DIR__ . "/../models/IngredientsModel.php";
+    require_once __DIR__ . "/../models/IngredientsModel.php";
 
-class IngredientsController extends BaseController{
-    //method qui va nous donner tous les ingrédients
-    public function getIngredients() {
+    class IngredientsController extends BaseController{
+
+            /**
+     * 
+     */
+    public function searchIngredients() {
         try {
           $ingredientsModel = new Ingredients();
   
@@ -19,7 +22,7 @@ class IngredientsController extends BaseController{
             $offset = ($urlParams['page'] - 1) * $limit;
           }
   
-          $ingredients = $ingredientsModel->searchBeers($offset, $limit);
+          $ingredients = $ingredientsModel->searchIngredients($offset, $limit);
   
           $responseData = json_encode($ingredients);
   
@@ -29,11 +32,12 @@ class IngredientsController extends BaseController{
           $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
           $this->sendOutput($strErrorDesc, ['Content-Type: application/json', $strErrorHeader]);
         }
-    }
-    //method qui va nous ressortir une biere via son ingrédients
-    public function readIngredients() {
+      }
+
+      //Création de la deuxieme methode pour selectionner une biere selon son id
+      public function readIngredients() {
         try {
-            $ingredientsModel = new Ingredients();
+          $ingredientsModel = new Ingredient();
   
           $urlParams = $this->getQueryStringParams();
           if (!isset($urlParams['id']) || !is_numeric($urlParams['id'])) {
@@ -41,12 +45,12 @@ class IngredientsController extends BaseController{
           }
   
           // TEST SI LA BIERE EXISTE 
-          $beer = $ingredientsModel->getObject($urlParams['id']);
-          if($beer == false){
+          $ingredient = $ingredientsModel->readIngredients($urlParams['id']);
+          if($ingredient == false){
             throw new Exception("L'ID rentré n'existe pas");
           }
   
-          $responseData = json_encode($beer);
+          $responseData = json_encode($ingredient);
   
           $this->sendOutput($responseData);
         } catch (Error $e) {
@@ -56,9 +60,9 @@ class IngredientsController extends BaseController{
         }
       }
 
-      public function createBeers() {
+      public function createIngredients() {
         try {
-            $ingredientsModel = new Ingredients();
+          $ingredientsModel = new Ingredient();
   
           $body = $this->getBody();
           if (!$body) {
@@ -72,35 +76,38 @@ class IngredientsController extends BaseController{
             if (!isset($body[$i]['id'])) {
               throw new Exception("Aucun id n'a été spécifié");
             }
-            if (!isset($body[$i]['type'])) {
+            if (!isset($body[$i]['name'])) {
               throw new Exception("Aucun nom n'a été spécifié");
             }
-            if (!isset($body[$i]['name'])) {
+            if (!isset($body[$i]['tagline'])) {
               throw new Exception("Aucun tagline n'a été spécifié");
             }
-            if (!isset($body[$i]['amount_value'])) {
-              throw new Exception("Aucune valeur n'a été saisie");
+            if (!isset($body[$i]['first_brewed'])) {
+              throw new Exception("Aucun date n'a été spécifié");
             }
-            if (!isset($body[$i]['amount_unit'])) {
-              throw new Exception("Aucune quantité n'a été saisie");
+            if (!isset($body[$i]['description'])) {
+              throw new Exception("Aucune description n'a été spécifiée");
             }
-            if (!isset($body[$i]['amount_add'])) {
-              throw new Exception("Aucune quantité n'a été ajouté");
+            if (!isset($body[$i]['image_url'])) {
+              throw new Exception("Aucune image n'a été spécifiée");
             }
-            if (!isset($body[$i]['amount_attribute'])) {
-              throw new Exception("Aucuns attribut n'a été définit");
+            if (!isset($body[$i]['brewers_tips'])) {
+              throw new Exception("Aucuns conseils n'a été spécifié");
+            }
+            if (!isset($body[$i]['contributed_by'])) {
+              throw new Exception("Aucune contribution n'a été spécifiée");
             }
             // DECOMPOSE LE TABLEAU POUR ENSUITE L'ENVOYER DANS LA BDD
             $keys = array_keys($body[$i]);
             $valuesToInsert = [];
             foreach($keys as $key) {
-              if (in_array($key, ['id', 'type', 'name', 'amount_value', 'amount_unit', 'amount_add', 'amount_attribute'])) {
+              if (in_array($key, ['id', 'name', 'tagline', 'first_brewed', 'description', 'image_url', 'brewers_tips', 'contributed_by'])) {
                 $valuesToInsert[$key] = $body[$i][$key];
               }
             }
             // CRÉATION DE LA BIÈRE DANS LA BASE DE DONNÉES
-            $ingredients = $ingredientsModel->insert($valuesToInsert);
-            // var_dump($beer);
+            $ingredient = $ingredientsModel->createIngredients($valuesToInsert);
+            // var_dump($ingredient);
           }
           
           $responseData = json_encode(array(
@@ -115,4 +122,106 @@ class IngredientsController extends BaseController{
           $this->sendOutput($strErrorDesc, ['Content-Type: application/json', $strErrorHeader]);
         }
       }
-}
+
+      public function updateIngredients() {
+        try {
+          // Initialisation de l'instance
+          $ingredientsModel = new Ingredient();
+          
+          $urlParams = $this->getQueryStringParams();
+          if (!isset($urlParams['id']) || !is_numeric($urlParams['id'])) {
+            throw new Exception("L'identifiant est incorrect ou n'a pas été spécifié");
+          }
+          
+          // TEST SI LA BIERE EXISTE
+          $ingredient = $ingredientsModel->readIngredients($urlParams['id']);
+          if($ingredient == false){
+            throw new Exception("L'ID rentré n'existe pas");
+          }
+
+          $body = $this->getBody();
+          if (!$body) {
+            throw new Exception("L'identifiant est incorrect ou n'a pas été spécifié");
+          }
+  
+          $counter = count($body);
+
+          // VERIFIE SI LES DONNEES ONT BIEN ETE RENTREES
+          for($i = 0; $i < $counter; $i++){
+            if (!isset($body[$i]['id'])) {
+              throw new Exception("Aucun id n'a été spécifié");
+            }
+            if (!isset($body[$i]['type'])) {
+              throw new Exception("Aucun type n'a été spécifié");
+            }
+            if (!isset($body[$i]['name'])) {
+              throw new Exception("Aucun nom n'a été spécifié");
+            }
+            if (!isset($body[$i]['amount_value'])) {
+              throw new Exception("Aucun valeur n'a été spécifié");
+            }
+            if (!isset($body[$i]['amount_unit'])) {
+              throw new Exception("Aucune quantité d'unité n'a été spécifiée");
+            }
+            if (!isset($body[$i]['amount_add'])) {
+              throw new Exception("Aucuns changment n'a été spécifiée");
+            }
+            if (!isset($body[$i]['amount_attribute'])) {
+              throw new Exception("Aucunes attributions n'a été spécifié");
+            }
+            
+            // DECOMPOSE LE TABLEAU POUR ENSUITE L'ENVOYER DANS LA BDD
+            $keys = array_keys($body[$i]);
+            $valuesToInsert = [];
+            foreach($keys as $key) {
+              if (in_array($key, ['id', 'name', 'tagline', 'first_brewed', 'description', 'image_url', 'brewers_tips', 'contributed_by'])) {
+                $valuesToInsert[$key] = $body[$i][$key];
+              }
+            }
+            
+            // CRÉATION DE LA BIÈRE DANS LA BASE DE DONNÉES
+            $ingredient = $ingredientsModel->updateIngredients($valuesToInsert, $urlParams['id']);
+          }
+    
+          $responseData = json_encode(array(
+            "status" => true,
+            "success" => 200
+            ));
+  
+         
+          $this->sendOutput($responseData);
+        } catch (Error $e) {
+          
+          $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
+          $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+          $this->sendOutput($strErrorDesc, ['Content-Type: application/json', $strErrorHeader]);
+        }
+      }
+
+      /**
+     * 
+     */
+    public function deleteIngredients() {
+      try {
+        
+        $ingredientsModel = new Ingredient();
+
+        
+        $urlParams = $this->getQueryStringParams();
+        if (!isset($urlParams['id']) || !is_numeric($urlParams['id'])) {
+          throw new Exception("L'identifiant est incorrect ou n'a pas été spécifié");
+        }
+        
+        $responseData = json_encode($ingredientsModel->deleteIngredients($urlParams['id']));
+
+        
+        $this->sendOutput($responseData);
+      } catch (Error $e) {
+        
+        $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
+        $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+        $this->sendOutput($strErrorDesc, ['Content-Type: application/json', $strErrorHeader]);
+      }
+    }
+
+    }
