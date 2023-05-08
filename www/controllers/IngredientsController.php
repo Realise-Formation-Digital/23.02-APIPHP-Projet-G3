@@ -167,7 +167,7 @@
               throw new Exception("Aucuns changment n'a été spécifiée");
             }
             if (!isset($body[$i]['amount_attribute'])) {
-              throw new Exception("Aucunes attributions n'a été spécifié");
+              throw new Exception("Aucunes att n'a été spécifié");
             }
             
             // DECOMPOSE LE TABLEAU POUR ENSUITE L'ENVOYER DANS LA BDD
