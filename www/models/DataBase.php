@@ -41,7 +41,7 @@ class Database{
    *   @param string $query
    *   return object
    */
-   public function getObject(string $query): array{
+   public function getObject(string $query): bool|array{
       try{
          // prepare statement
          $stmt = $this->connect->prepare($query);
@@ -81,16 +81,14 @@ class Database{
    *   @param string $checkitem
    *   return object
    */
-   public function update(string $query, string $checkQuery, string $checkItem): array{
+   public function update(string $query, string $checkQuery, string $checkItem): bool|array{
       try{
          // Check if the entry exists before updating it
          if ($this->getObject($checkQuery)){
             // execute the query
             $this->connect->exec($query);
-            // get last id from inserted object
-            $last_id = $this->connect->lastInsertId();
             // returns the last updated object in the database
-            return $this->getObject($checkItem . " WHERE id=" . $last_id);
+            return $this->getObject($checkItem);
          } else {
             throw new Exception("Cannot update item because the item doesn't exist in the database");
          }
@@ -106,14 +104,16 @@ class Database{
    *   @param string $checkitem
    *   return object
    */
-   public function delete(string $query, string $checkQuery): string{
+   public function delete(string $query, string $checkQuery): array{
       try{
          // Check if the entry exists before deleting it
          if ($this->getObject($checkQuery)){
             // execute the query
             $this->connect->exec($query);
             // returns a message saying the item has been deleted
-            $message = 'Message : The item has been successfully deleted';
+            $message = [
+               "Message" => "the item has been successfully deleted"
+            ];
             return $message;
          } else {
             throw new Exception("Cannot delete item because the item doesn't exist in the database");
