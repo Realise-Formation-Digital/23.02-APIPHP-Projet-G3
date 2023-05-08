@@ -6,7 +6,7 @@
             /**
      * 
      */
-    public function getList() {
+    public function getBeers() {
         try {
           $beerModel = new Beer();
   
@@ -22,7 +22,7 @@
             $offset = ($urlParams['page'] - 1) * $limit;
           }
   
-          $beers = $beerModel->getAllBeers($offset, $limit);
+          $beers = $beerModel->searchBeers($offset, $limit);
   
           $responseData = json_encode($beers);
   
@@ -35,7 +35,7 @@
       }
 
       //Création de la deuxieme methode pour selectionner une biere selon son id
-      public function get() {
+      public function readBeers() {
         try {
           $beerModel = new Beer();
   
@@ -56,7 +56,7 @@
         }
       }
 
-      public function store() {
+      public function createBeers() {
         try {
           $beerModel = new Beer();
   
@@ -64,6 +64,8 @@
           if (!$body) {
             throw new Exception("Aucune donnée n'a été transmise dans le formulaire");
           }
+
+          // var_dump($body);
   
           if (!isset($body['id'])) {
             throw new Exception("Aucun id n'a été spécifié");
@@ -113,7 +115,7 @@
         }
       }
 
-      public function update() {
+      public function updateBeers() {
         try {
           // Initialisation de l'instance
           $beerModel = new Beer();
@@ -142,7 +144,7 @@
   
     
           $responseData = json_encode(array(
-            "statuts" => true,
+            "status" => true,
             "success" => 200
             ));
   
@@ -159,7 +161,7 @@
       /**
      * 
      */
-    public function destroy() {
+    public function deleteBeers() {
       try {
         
         $beerModel = new Beer();

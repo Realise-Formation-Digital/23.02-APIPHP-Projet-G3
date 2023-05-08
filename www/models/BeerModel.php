@@ -1,6 +1,6 @@
 <?php
 
-require_once "./DataBase.php";
+require_once __DIR__ . "/../models/DataBase.php";
 
 /*-----création d'une class Beer pour faire des requettes dans la base de données ---*/
 class Beer extends Database
