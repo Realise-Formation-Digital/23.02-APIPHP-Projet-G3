@@ -6,7 +6,7 @@ class Database{
    /**
     * Class contructor - connect to the database API
     */
-   public function __contruct(){
+   public function __construct(){
       try{
          // try connecting to the database
          $this->connect = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_DATABASE_NAME, DB_USERNAME, DB_PASSWORD);
