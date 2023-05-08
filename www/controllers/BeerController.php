@@ -81,7 +81,7 @@
             throw new Exception("Aucune donnée n'a été transmise dans le formulaire");
           }
   
-          // ---- TODO : Commenter ce bout de code ----
+          //gestion des erreurs si un champ n'est pas spécifié
           if (!isset($body['id'])) {
             throw new Exception("Aucun id n'a été spécifié");
           }
@@ -107,7 +107,7 @@
             throw new Exception("Aucune date n'a été spécifié");
           }
   
-          // ---- TODO : Commenter ce bout de code ----
+          // nous allons creer un tableau vide qui va venir contenir les choses à mettre à jour et données id name etc
           $keys = array_keys($body);
           $valuesToInsert = [];
           foreach($keys as $key) {
@@ -116,19 +116,17 @@
             }
           }
   
-          // ---- TODO : Commenter ce bout de code ----
+          //commande qui va insérer nos info
           $beer = $beerModel->insertBeer($valuesToInsert);
   
-          // ---- TODO : Commenter ce bout de code ----
+          //nous allons encoder les infos en format json et renvoyé le statut true avec son code de succes 
           $responseData = json_encode(array(
             "statuts" => true,
             "success" => 200
             ));
-  
-          // ---- TODO : Commenter ce bout de code ----
           $this->sendOutput($responseData);
         } catch (Error $e) {
-          // ---- TODO : Commenter ce bout de code ----
+          // gestion des erreurs 
           $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
           $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
           $this->sendOutput($strErrorDesc, ['Content-Type: application/json', $strErrorHeader]);
@@ -137,21 +135,20 @@
 
       public function update() {
         try {
-          // ---- TODO : Commenter ce bout de code ----
+          // Initialisation de l'instance
           $beerModel = new Beer();
   
-          // ---- TODO : Commenter ce bout de code ----
+          
           $body = $this->getBody();
           if (!$body) {
             throw new Exception("L'identifiant est incorrect ou n'a pas été spécifié");
           }
   
-          // ---- TODO : Commenter ce bout de code ----
+          // nous venons vérifier que le champ id sois bien remplis
           if (!isset($body['id'])) {
             throw new Exception("Aucun identifiant n'a été spécifié");
           }
   
-          // ---- TODO : Commenter ce bout de code ----
           $keys = array_keys($body);
           $valuesToUpdate = [];
           foreach($keys as $key) {
@@ -160,19 +157,19 @@
             }
           }
   
-          // ---- TODO : Commenter ce bout de code ----
+          
           $beer = $beerModel->updateBeer($valuesToUpdate, $body['id']);
   
-          // ---- TODO : Commenter ce bout de code ----
+    
           $responseData = json_encode(array(
             "statuts" => true,
             "success" => 200
             ));
   
-          // ---- TODO : Commenter ce bout de code ----
+         
           $this->sendOutput($responseData);
         } catch (Error $e) {
-          // ---- TODO : Commenter ce bout de code ----
+          
           $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
           $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
           $this->sendOutput($strErrorDesc, ['Content-Type: application/json', $strErrorHeader]);
@@ -180,29 +177,29 @@
       }
 
       /**
-     * ---- TODO : Commenter cette méthode ----
+     * 
      */
     public function destroy() {
       try {
-        // ---- TODO : Commenter ce bout de code ----
+        
         $beerModel = new Beer();
 
-        // ---- TODO : Commenter ce bout de code ----
+        
         $urlParams = $this->getQueryStringParams();
         if (!isset($urlParams['id']) || !is_numeric($urlParams['id']) || !in_array($urlParams['id'])) {
           throw new Exception("L'identifiant est incorrect ou n'a pas été spécifié");
         }
 
-        // ---- TODO : Commenter ce bout de code ----
+        
         $beer = $beerModel->deleteBeer($urlParams['id']);
 
-        // ---- TODO : Commenter ce bout de code ----
+        
         $responseData = json_encode("L'utilisateur a été correctement supprimé");
 
-        // ---- TODO : Commenter ce bout de code ----
+        
         $this->sendOutput($responseData);
       } catch (Error $e) {
-        // ---- TODO : Commenter ce bout de code ----
+        
         $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
         $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
         $this->sendOutput($strErrorDesc, ['Content-Type: application/json', $strErrorHeader]);
