@@ -21,7 +21,7 @@ class Database{
    *    @param string $query
    *    return object
    */
-   public function getObjects(string $query): stdClass{
+   public function getObjects(string $query): array{
       try{
          // prepare statement
          $stmt = $this->connect->prepare($query);
@@ -41,7 +41,7 @@ class Database{
    *   @param string $query
    *   return object
    */
-   public function getObject(string $query): stdClass{
+   public function getObject(string $query): array{
       try{
          // prepare statement
          $stmt = $this->connect->prepare($query);
@@ -61,7 +61,7 @@ class Database{
    *   @param string $checkitem
    *   return object
    */
-   public function insert(string $query, string $checkItem): stdClass{
+   public function insert(string $query, string $checkItem): array{
       try{
          // execute the query.
          $this->connect->exec($query);
@@ -81,7 +81,7 @@ class Database{
    *   @param string $checkitem
    *   return object
    */
-   public function update(string $query, string $checkQuery, string $checkItem): stdClass{
+   public function update(string $query, string $checkQuery, string $checkItem): array{
       try{
          // Check if the entry exists before updating it
          if ($this->getObject($checkQuery)){
