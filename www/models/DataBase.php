@@ -41,14 +41,15 @@ class Database{
    *   @param string $query
    *   return object
    */
-   public function getObject(string $query): bool|array{
+   public function getObject(string $query): bool|stdClass{
       try{
          // prepare statement
          $stmt = $this->connect->prepare($query);
          // execute the statement.
          $stmt->execute();
          // returns an anonymous object with property names that correspond to the column names returned in your result set 
-         return $stmt->fetch(); 
+         // var_dump($stmt->fetch());
+         return $stmt->fetch(PDO::FETCH_OBJ); 
       } catch(PDOException $e){
          // send an error for there was an error with the inserted query
          throw new PDOException($e->getMessage());
