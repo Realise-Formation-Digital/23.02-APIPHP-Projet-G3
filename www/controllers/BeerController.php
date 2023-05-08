@@ -210,15 +210,11 @@
 
         
         $urlParams = $this->getQueryStringParams();
-        if (!isset($urlParams['id']) || !is_numeric($urlParams['id']) || !in_array($urlParams['id'])) {
+        if (!isset($urlParams['id']) || !is_numeric($urlParams['id'])) {
           throw new Exception("L'identifiant est incorrect ou n'a pas été spécifié");
         }
-
         
-        $beer = $beerModel->deleteBeer($urlParams['id']);
-
-        
-        $responseData = json_encode("L'utilisateur a été correctement supprimé");
+        $responseData = json_encode($beerModel->deleteBeers($urlParams['id']));
 
         
         $this->sendOutput($responseData);

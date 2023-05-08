@@ -10,7 +10,7 @@ class Beer extends Database
   public function searchBeers() {
    return $this->getObjects("SELECT * FROM beers");
   }
-
+/*----- la fonction create -----*/
   public function createBeers($beers) {
     unset($beers['id']);
 
@@ -22,25 +22,29 @@ class Beer extends Database
     return $this-> insert("INSERT INTO beers ($keys) VALUES ($values)", "SELECT * FROM beers");
   }
   
+  /*----- la fonction read -----*/
   public function readBeers($id) {
     return $this-> getObject("SELECT * FROM beers WHERE id=$id");
   }
-  public function updateBeers ($beers,$id){
-    // ---- faire une boucle pour executer l'ajout d'éléments au tableau ----
-    $values_beers = [];
-    foreach($beers as $key => $value) {
-      $values_beers[] = "$key = '$value'";
-    }
-    $values = implode(",", array_values($values_beers));
-    /*----- s'assurer que les bierres n'existe pas déjà pour l'ajouter à la liste de bierres----*/
-    return $this-> update ("UPDATE beers SET $values WHERE id = $id",
-    "SELECT id FROM beers WHERE id=$id",
-    "SELECT * FROM beers WHERE id=$id"
-  );
 
+  /*----- la fonction update -----*/
+  public function updateBeers ($beers,$id){
+    // ---- TODO : CASSE LA LISTE DE TABLEAU ET STOCK DANS UNE LISTE ----
+    $values_array = [];
+    foreach($beers as $key => $value) {
+      $values_array[] = "$key = \"$value\"";
+    }
+    $values = implode(",", array_values($values_array));
+
+    // ---- TODO : INJECTE LA LISTE DANS LA BASE DE DONNEE ----
+    return $this->update(
+      "UPDATE beers SET $values WHERE id = $id",
+      "SELECT id FROM beers WHERE id=$id",
+      "SELECT * FROM beers WHERE id=$id"
+    );
   }
 /*-----supprimer les bierres à l'aide de l'ID---*/
-  public function deleteBeers($beers,$id){
+  public function deleteBeers($id){
 
     return $this -> delete("DELETE FROM beers WHERE id=$id",
     "SELECT id FROM beers WHERE id=$id");
