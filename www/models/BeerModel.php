@@ -1,6 +1,6 @@
 <?php
 
-require_once "./DataBase.php";
+require_once __DIR__ . "/../models/DataBase.php";
 
 /*-----création d'une class Beer pour faire des requettes dans la base de données ---*/
 class Beer extends Database
@@ -18,36 +18,57 @@ class Beer extends Database
     public $food_paring3;
   
 /*----- la fonction recherche -----*/
-  public function searchBeers($offset = 0,$limit = 50) {
-   return $this->getObjects("SELECT * FROM beers ORDER BY name ASC LIMIT $offset, $limit");
+  public function searchBeers($filter = '', $sort = '', $page = '', $per_page = '') {
+    $options = '';
+    if ($filter) {
+      $options = "WHERE name=\"$filter\"";
+    }
+    if ($sort) {
+      $options .= " ORDER BY $sort";
+    }
+    if ($page) {
+      $options .= " WHERE $page";
+    }
+    if ($per_page) {
+      $options .= " WHERE $per_page";
+    }
+    
+    return $this->getObjects("SELECT * FROM beers $options");
   }
-
+  var_dump("SELECT * FROM beers $options");
+  
+/*----- la fonction create -----*/
   public function createBeers($beers) {
+    unset($beers['id']);
+
     // ---- ajouter des éléments dans un tableau en string ----
     $keys = implode(", ", array_keys($beers));
-    $values = implode("', '", array_values($beers));
+    $values = '"' . implode('", "', array_values($beers)) . '"';
+
 
     return $this-> insert("INSERT INTO beers ($keys) VALUES ($values)", "SELECT * FROM beers");
   }
   
+  /*----- la fonction read -----*/
   public function readBeers($id) {
     return $this-> getObject("SELECT * FROM beers WHERE id=$id");
-    
   }
-  public function updatebeers ($beers,$id){
-    // ---- faire une boucle pour executer l'ajout d'éléments au tableau ----
-    $values_beers = [];
+
+  /*----- la fonction update -----*/
+  public function updateBeers ($beers,$id){
+    // ---- TODO : CASSE LA LISTE DE TABLEAU ET STOCK DANS UNE LISTE ----
+    $values_array = [];
     foreach($beers as $key => $value) {
-      $values_beers[] = "$key = '$value'";
+      $values_array[] = "$key = \"$value\"";
     }
-    $values = implode(",", array_values($values_beers));
+    $values = implode(",", array_values($values_array));
 
-    /*----- s'assurer que les bierres n'existe pas déjà pour l'ajouter à la liste de bierres----*/
-    return $this-> update ("UPDATE beers SET $values WHERE id = $id",
-    "SELECT id FROM beers WHERE id=$id",
-    "SELECT * FROM beers WHERE id=$id"
-  );
-
+    // ---- TODO : INJECTE LA LISTE DANS LA BASE DE DONNEE ----
+    return $this->update(
+      "UPDATE beers SET $values WHERE id = $id",
+      "SELECT id FROM beers WHERE id=$id",
+      "SELECT * FROM beers WHERE id=$id"
+    );
   }
 /*-----supprimer les bierres à l'aide de l'ID---*/
   public function deleteBeers($id){
