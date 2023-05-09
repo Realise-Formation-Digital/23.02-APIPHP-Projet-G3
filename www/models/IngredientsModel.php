@@ -1,6 +1,6 @@
 <?php
 
-require_once "./DataBase.php";
+require_once __DIR__ . "/../models/DataBase.php";
 
 /*-----création d'une class ingredients pour chercher dans la base de données ---*/
 class Ingredients extends Database
@@ -11,11 +11,16 @@ class Ingredients extends Database
    return $this->getObjects("SELECT * FROM ingredients");
   }
 
-  public function createIngredients($ingredients) {
+  public function createIngredients($ingredient) {
     // ---- ajouter des éléments dans un tableau en string ----
-    $keys = implode(", ", array_keys($ingredients));
-    $values = implode("', '", array_values($ingredients));
-
+    // $keys = implode(", ", array_keys($ingredients));
+    // $values = '"' . implode('", "', array_values($ingredients)) . '"';
+    $keys = implode(", ", array_keys($ingredient));
+    $tab = [];
+    foreach($ingredient as $item) {
+      $tab[] = is_string($item) ? "\"$item\"" : $item;
+    }
+    $values = implode(',' , $tab);
     return $this-> insert("INSERT INTO ingredients ($keys) VALUES ($values)", "SELECT * FROM ingredients");
   }
   
@@ -39,7 +44,7 @@ class Ingredients extends Database
 
   }
 /*-----supprimer les ingredients à l'aide de l'ID---*/
-  public function deleteIngredients($ingredients,$id){
+  public function deleteIngredients($id){
 
     return $this -> delete("DELETE FROM ingredients WHERE id=$id",
     "SELECT id FROM ingredients WHERE id=$id");
