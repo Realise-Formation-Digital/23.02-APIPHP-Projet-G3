@@ -5,11 +5,38 @@ require_once __DIR__ . "/../models/DataBase.php";
 /*-----création d'une class Beer pour faire des requettes dans la base de données ---*/
 class Beer extends Database
 {
+    public $id;
+    public $name;
+    public $tagline;
+    public $first_brewed;
+    public $description;
+    public $image_url;
+    public $brewers_tips;
+    public $contribued_by;
+    public $food_pairin1;
+    public $food_paring2;
+    public $food_paring3;
   
 /*----- la fonction recherche -----*/
-  public function searchBeers() {
-   return $this->getObjects("SELECT * FROM beers");
+  public function searchBeers($filter = '', $sort = '', $page = '', $per_page = '') {
+    $options = '';
+    if ($filter) {
+      $options = "WHERE name=\"$filter\"";
+    }
+    if ($sort) {
+      $options .= " ORDER BY $sort";
+    }
+    if ($page) {
+      $options .= " WHERE $page";
+    }
+    if ($per_page) {
+      $options .= " WHERE $per_page";
+    }
+    
+    return $this->getObjects("SELECT * FROM beers $options");
   }
+  // var_dump("SELECT * FROM beers $options");
+  
 /*----- la fonction create -----*/
   public function createBeers($beers) {
     unset($beers['id']);

@@ -22,7 +22,8 @@
             $offset = ($urlParams['page'] - 1) * $limit;
           }
   
-          $beers = $beerModel->searchBeers($offset, $limit);
+          // $beers = $beerModel->searchBeers($offset, $limit);
+          $beers = $beerModel->searchBeers('Caramalt', 'name','page');
   
           $responseData = json_encode($beers);
   
