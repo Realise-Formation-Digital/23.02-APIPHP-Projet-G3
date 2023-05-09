@@ -74,10 +74,11 @@
 
           // VERIFIE SI LES DONNEES ONT BIEN ETE RENTREES
           foreach ($ingredients as $ingredient) {
-            if (!isset($ingredient['id'])) {
-              throw new Exception("Aucun id n'a été spécifié");
+            if (isset($ingredient['id'])) {
+              throw new Exception("Attention un id a été spécifié");
             }
             if (!isset($ingredient['type'])) {
+              var_dump($ingredient);
               throw new Exception("Aucun type n'a été spécifié");
             }
             if (!isset($ingredient['name'])) {
@@ -97,7 +98,7 @@
             }
             
 
-            // CRÉATION DE LA BIÈRE DANS LA BASE DE DONNÉES
+            // CRÉATION DE L'ingredient DANS LA BASE DE DONNÉES
             $ingredients = $ingredientsModel->createIngredients($ingredient);            
           }
 

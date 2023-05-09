@@ -63,52 +63,53 @@
       public function createBeers() {
         try {
           $beerModel = new Beer();
-  
+          
           $body = $this->getBody();
           if (!$body) {
             throw new Exception("Aucune donnée n'a été transmise dans le formulaire");
           }
-
-          $counter = count($body);
-
           // VERIFIE SI LES DONNEES ONT BIEN ETE RENTREES
-          for($i = 0; $i < $counter-1; $i++){
-            if (!isset($body[$i]['id'])) {
+          
+            
+            /*
+            if (!isset($body['id'])) {
               throw new Exception("Aucun id n'a été spécifié");
             }
-            if (!isset($body[$i]['name'])) {
+            */
+            if (!isset($body['name'])) {
               throw new Exception("Aucun nom n'a été spécifié");
             }
-            if (!isset($body[$i]['tagline'])) {
+            if (!isset($body['tagline'])) {
               throw new Exception("Aucun tagline n'a été spécifié");
             }
-            if (!isset($body[$i]['first_brewed'])) {
+            if (!isset($body['first_brewed'])) {
               throw new Exception("Aucun date n'a été spécifié");
             }
-            if (!isset($body[$i]['description'])) {
+            if (!isset($body['description'])) {
               throw new Exception("Aucune description n'a été spécifiée");
             }
-            if (!isset($body[$i]['image_url'])) {
+            if (!isset($body['image_url'])) {
               throw new Exception("Aucune image n'a été spécifiée");
             }
-            if (!isset($body[$i]['brewers_tips'])) {
+            if (!isset($body['brewers_tips'])) {
               throw new Exception("Aucuns conseils n'a été spécifié");
             }
-            if (!isset($body[$i]['contributed_by'])) {
+            if (!isset($body['contributed_by'])) {
               throw new Exception("Aucune contribution n'a été spécifiée");
             }
+            
             // DECOMPOSE LE TABLEAU POUR ENSUITE L'ENVOYER DANS LA BDD
-            $keys = array_keys($body[$i]);
+            $keys = array_keys($body);
             $valuesToInsert = [];
             foreach($keys as $key) {
               if (in_array($key, ['id', 'name', 'tagline', 'first_brewed', 'description', 'image_url', 'brewers_tips', 'contributed_by'])) {
-                $valuesToInsert[$key] = $body[$i][$key];
+                $valuesToInsert[$key] = $body[$key];
               }
             }
             // CRÉATION DE LA BIÈRE DANS LA BASE DE DONNÉES
             $beer = $beerModel->createBeers($valuesToInsert);
-            // var_dump($beer);
-          }
+            
+          
           
           $responseData = json_encode(array(
             "statuts" => true,
@@ -142,48 +143,42 @@
           $body = $this->getBody();
           if (!$body) {
             throw new Exception("L'identifiant est incorrect ou n'a pas été spécifié");
-          }
-  
-          $counter = count($body);
+          }  
 
           // VERIFIE SI LES DONNEES ONT BIEN ETE RENTREES
-          for($i = 0; $i < $counter; $i++){
-            if (!isset($body[$i]['id'])) {
-              throw new Exception("Aucun id n'a été spécifié");
-            }
-            if (!isset($body[$i]['name'])) {
+            if (!isset($body['name'])) {
               throw new Exception("Aucun nom n'a été spécifié");
             }
-            if (!isset($body[$i]['tagline'])) {
+            if (!isset($body['tagline'])) {
               throw new Exception("Aucun tagline n'a été spécifié");
             }
-            if (!isset($body[$i]['first_brewed'])) {
+            if (!isset($body['first_brewed'])) {
               throw new Exception("Aucun date n'a été spécifié");
             }
-            if (!isset($body[$i]['description'])) {
+            if (!isset($body['description'])) {
               throw new Exception("Aucune description n'a été spécifiée");
             }
-            if (!isset($body[$i]['image_url'])) {
+            if (!isset($body['image_url'])) {
               throw new Exception("Aucune image n'a été spécifiée");
             }
-            if (!isset($body[$i]['brewers_tips'])) {
+            if (!isset($body['brewers_tips'])) {
               throw new Exception("Aucuns conseils n'a été spécifié");
             }
-            if (!isset($body[$i]['contributed_by'])) {
+            if (!isset($body['contributed_by'])) {
               throw new Exception("Aucune contribution n'a été spécifiée");
             }
             // DECOMPOSE LE TABLEAU POUR ENSUITE L'ENVOYER DANS LA BDD
-            $keys = array_keys($body[$i]);
+            $keys = array_keys($body);
             $valuesToInsert = [];
             foreach($keys as $key) {
               if (in_array($key, ['id', 'name', 'tagline', 'first_brewed', 'description', 'image_url', 'brewers_tips', 'contributed_by'])) {
-                $valuesToInsert[$key] = $body[$i][$key];
+                $valuesToInsert[$key] = $body[$key];
               }
             }
             
             // CRÉATION DE LA BIÈRE DANS LA BASE DE DONNÉES
             $beer = $beerModel->updateBeers($valuesToInsert, $urlParams['id']);
-          }
+          
     
           $responseData = json_encode(array(
             "status" => true,
