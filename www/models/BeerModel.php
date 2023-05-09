@@ -7,9 +7,25 @@ class Beer extends Database
 {
   
 /*----- la fonction recherche -----*/
-  public function searchBeers() {
-   return $this->getObjects("SELECT * FROM beers");
+  public function searchBeers($filter = '', $sort = '', $page = '', $per_page = '') {
+    $options = '';
+    if ($filter) {
+      $options = "WHERE name=\"$filter\"";
+    }
+    if ($sort) {
+      $options .= " ORDER BY $sort";
+    }
+    if ($page) {
+      $options .= " WHERE $page";
+    }
+    if ($per_page) {
+      $options .= " WHERE $per_page";
+    }
+    
+    return $this->getObjects("SELECT * FROM beers $options");
   }
+  var_dump("SELECT * FROM beers $options");
+  
 /*----- la fonction create -----*/
   public function createBeers($beers) {
     unset($beers['id']);

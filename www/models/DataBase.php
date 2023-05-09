@@ -62,7 +62,7 @@ class Database{
    *   @param string $checkitem
    *   return object
    */
-   public function insert(string $query, string $checkItem): array{
+   public function insert(string $query, string $checkItem): stdClass {
       try{
          // execute the query.
          $this->connect->exec($query);
