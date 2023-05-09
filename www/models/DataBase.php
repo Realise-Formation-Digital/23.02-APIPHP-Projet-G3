@@ -41,7 +41,7 @@ class Database{
    *   @param string $query
    *   return object
    */
-   public function getObject(string $query): bool|stdClass{
+   public function getObject(string $query): bool|array{
       try{
          // prepare statement
          $stmt = $this->connect->prepare($query);
@@ -49,7 +49,7 @@ class Database{
          $stmt->execute();
          // returns an anonymous object with property names that correspond to the column names returned in your result set 
          // var_dump($stmt->fetch());
-         return $stmt->fetch(PDO::FETCH_OBJ); 
+         return $stmt->fetch(PDO::FETCH_ASSOC); 
       } catch(PDOException $e){
          // send an error for there was an error with the inserted query
          throw new PDOException($e->getMessage());
@@ -66,10 +66,8 @@ class Database{
       try{
          // execute the query.
          $this->connect->exec($query);
-         // get last id from inserted object
-         $last_id = $this->connect->lastInsertId();
-         // returns the last inserted object in the database
-         return $this->getObject($checkItem . " WHERE id=" . $last_id);
+         // returns the last updated object in the database
+         return $this->getObject($checkItem);
       } catch(PDOException $e){
          // send an error for there was an error with the inserted query
          throw new PDOException($e->getMessage());

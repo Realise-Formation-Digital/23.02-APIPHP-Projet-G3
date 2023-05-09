@@ -72,7 +72,7 @@
           $counter = count($body);
 
           // VERIFIE SI LES DONNEES ONT BIEN ETE RENTREES
-          for($i = 0; $i < $counter; $i++){
+          for($i = 0; $i < $counter-1; $i++){
             if (!isset($body[$i]['id'])) {
               throw new Exception("Aucun id n'a été spécifié");
             }

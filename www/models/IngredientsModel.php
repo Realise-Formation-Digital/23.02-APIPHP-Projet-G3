@@ -1,6 +1,6 @@
 <?php
 
-require_once "./DataBase.php";
+require_once __DIR__ . "/../models/DataBase.php";
 
 /*-----création d'une class ingredients pour chercher dans la base de données ---*/
 class Ingredients extends Database
@@ -14,7 +14,7 @@ class Ingredients extends Database
   public function createIngredients($ingredients) {
     // ---- ajouter des éléments dans un tableau en string ----
     $keys = implode(", ", array_keys($ingredients));
-    $values = implode("', '", array_values($ingredients));
+    $values = '"' . implode('", "', array_values($ingredients)) . '"';
 
     return $this-> insert("INSERT INTO ingredients ($keys) VALUES ($values)", "SELECT * FROM ingredients");
   }

@@ -3,7 +3,7 @@
 
     class IngredientsController extends BaseController{
 
-            /**
+      /**
      * 
      */
     public function searchIngredients() {
@@ -37,7 +37,7 @@
       //Création de la deuxieme methode pour selectionner une biere selon son id
       public function readIngredients() {
         try {
-          $ingredientsModel = new Ingredient();
+          $ingredientsModel = new Ingredients();
   
           $urlParams = $this->getQueryStringParams();
           if (!isset($urlParams['id']) || !is_numeric($urlParams['id'])) {
@@ -62,7 +62,7 @@
 
       public function createIngredients() {
         try {
-          $ingredientsModel = new Ingredient();
+          $ingredientsModel = new Ingredients();
   
           $body = $this->getBody();
           if (!$body) {
@@ -72,31 +72,29 @@
           $counter = count($body);
 
           // VERIFIE SI LES DONNEES ONT BIEN ETE RENTREES
-          for($i = 0; $i < $counter; $i++){
+          for($i = 0; $i < $counter-1; $i++){
             if (!isset($body[$i]['id'])) {
               throw new Exception("Aucun id n'a été spécifié");
+            }
+            if (!isset($body[$i]['type'])) {
+              throw new Exception("Aucun type n'a été spécifié");
             }
             if (!isset($body[$i]['name'])) {
               throw new Exception("Aucun nom n'a été spécifié");
             }
-            if (!isset($body[$i]['tagline'])) {
-              throw new Exception("Aucun tagline n'a été spécifié");
+            if (!isset($body[$i]['amount_value'])) {
+              throw new Exception("Aucun valeur n'a été spécifié");
             }
-            if (!isset($body[$i]['first_brewed'])) {
-              throw new Exception("Aucun date n'a été spécifié");
+            if (!isset($body[$i]['amount_unit'])) {
+              throw new Exception("Aucune unité n'a été spécifiée");
             }
-            if (!isset($body[$i]['description'])) {
-              throw new Exception("Aucune description n'a été spécifiée");
+            if (!isset($body[$i]['amount_add'])) {
+              throw new Exception("Aucun ajout n'a été spécifiée");
             }
-            if (!isset($body[$i]['image_url'])) {
-              throw new Exception("Aucune image n'a été spécifiée");
+            if (!isset($body[$i]['amount_attribute'])) {
+              throw new Exception("Aucunes propriétées n'a été spécifié");
             }
-            if (!isset($body[$i]['brewers_tips'])) {
-              throw new Exception("Aucuns conseils n'a été spécifié");
-            }
-            if (!isset($body[$i]['contributed_by'])) {
-              throw new Exception("Aucune contribution n'a été spécifiée");
-            }
+            
             // DECOMPOSE LE TABLEAU POUR ENSUITE L'ENVOYER DANS LA BDD
             $keys = array_keys($body[$i]);
             $valuesToInsert = [];
@@ -126,7 +124,7 @@
       public function updateIngredients() {
         try {
           // Initialisation de l'instance
-          $ingredientsModel = new Ingredient();
+          $ingredientsModel = new Ingredients();
           
           $urlParams = $this->getQueryStringParams();
           if (!isset($urlParams['id']) || !is_numeric($urlParams['id'])) {
@@ -204,7 +202,7 @@
     public function deleteIngredients() {
       try {
         
-        $ingredientsModel = new Ingredient();
+        $ingredientsModel = new Ingredients();
 
         
         $urlParams = $this->getQueryStringParams();
