@@ -206,7 +206,7 @@
         
         $responseData = json_encode($ingredientsModel->deleteIngredients($urlParams['id']));
 
-        
+        //gestion des erreurs        
         $this->sendOutput($responseData);
       } catch (Error $e) {
         
