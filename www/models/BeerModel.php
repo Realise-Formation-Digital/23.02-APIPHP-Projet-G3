@@ -35,7 +35,7 @@ class Beer extends Database
     
     return $this->getObjects("SELECT * FROM beers $options");
   }
-  var_dump("SELECT * FROM beers $options");
+  // var_dump("SELECT * FROM beers $options");
   
 /*----- la fonction create -----*/
   public function createBeers($beers) {
