@@ -19,21 +19,21 @@ class Beer extends Database
   
 /*----- la fonction recherche -----*/
   public function searchBeers($filter = '', $sort = '', $page = '', $per_page = '') {
-    $options = '';
-    if ($filter) {
-      $options = "WHERE name=\"$filter\"";
-    }
-    if ($sort) {
-      $options .= " ORDER BY $sort";
-    }
-    if ($page) {
-      $options .= " WHERE $page";
-    }
-    if ($per_page) {
-      $options .= " WHERE $per_page";
-    }
+    // $options = '';
+    // if ($filter) {
+    //   $options = "WHERE name=\"$filter\"";
+    // }
+    // if ($sort) {
+    //   $options .= " ORDER BY $sort";
+    // }
+    // if ($page) {
+    //   $options .= " LIMIT $page";
+    // }
+    // if ($per_page) {
+    //   $options .= " OFFSET $per_page";
+    // }
     
-    return $this->getObjects("SELECT * FROM beers $options");
+    return $this->getObjects("SELECT * FROM beers"); // add $options
   }
   // var_dump("SELECT * FROM beers $options");
   
@@ -56,6 +56,7 @@ class Beer extends Database
 
   /*----- la fonction update -----*/
   public function updateBeers ($beers,$id){
+    unset($beers['id']);
     //  CASSE LA LISTE DE TABLEAU ET STOCK DANS UNE LISTE ----
     $values_array = [];
     foreach($beers as $key => $value) {

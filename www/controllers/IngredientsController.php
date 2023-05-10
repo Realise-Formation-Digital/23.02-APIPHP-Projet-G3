@@ -71,14 +71,13 @@
           if (!$ingredients) {
             throw new Exception("Aucune donnée n'a été transmise dans le formulaire");
           }
-
           // VERIFIE SI LES DONNEES ONT BIEN ETE RENTREES
           foreach ($ingredients as $ingredient) {
+            var_dump($ingredients['type']);
             if (isset($ingredient['id'])) {
               throw new Exception("Attention un id a été spécifié");
             }
             if (!isset($ingredient['type'])) {
-              var_dump($ingredient);
               throw new Exception("Aucun type n'a été spécifié");
             }
             if (!isset($ingredient['name'])) {
