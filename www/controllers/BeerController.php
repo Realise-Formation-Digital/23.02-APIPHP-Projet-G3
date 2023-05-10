@@ -73,9 +73,7 @@
           
             
             /*
-            if (!isset($body['id'])) {
-              throw new Exception("Aucun id n'a été spécifié");
-            }
+            Gestion des erreurs pour les champs a remplir
             */
             if (!isset($body['name'])) {
               throw new Exception("Aucun nom n'a été spécifié");
@@ -197,7 +195,7 @@
       }
 
       /**
-     * 
+     * methode pour delete les binchs
      */
     public function deleteBeers() {
       try {
